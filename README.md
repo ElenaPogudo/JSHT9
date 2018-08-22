@@ -1,6 +1,6 @@
 # Cucumber from json to HTML reporter
-## To run
 ***
+## To run
 + npm install
 + node index.js --path <path to the cucumber json report with .json part>
 ***
