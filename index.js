@@ -16,8 +16,12 @@ function generateSteps(stepsArray, scenarioName) {
                 stepDuration = 0
             }
             stepsHtml += `<div class="step"><p><span class="text ${step.result.status}">
-                <span class="keyword highlight"> ${step.keyword} </span> ${step.name} 
-                <span class="time">time:${stepDuration}s</span></span></p></div>`;
+                <span class="keyword highlight"> ${step.keyword} </span> ${step.name}`
+                ;
+            if (step.result.status==="failed"){
+                stepsHtml +=`<br><br><span class="step"><span class="keyword highlight">Error: </span>${step.result.error_message}</span>`
+            }
+            stepsHtml +=`<span class="time">time:${stepDuration}s</span></span></p></div>`
         }
         else {
             if (step.embeddings !== undefined) {
