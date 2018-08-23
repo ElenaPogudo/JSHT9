@@ -85,14 +85,14 @@ module.exports = {
 
 
     startOfMain: `<br><br>
-<h2 class="step"><p><table>
+<h1 class="step"><p><table>
         <tr>
         <td><span class="keyword highlight step">Main info:</span></td>`,
 
 
     endOfMain: `</tr>
     </table>
-    </br></h2>`,
+    </br></h1>`,
 
     end: "</body></html>"
 };

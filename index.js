@@ -4,28 +4,32 @@ const pathToReport = argv.path;
 const htmlPage = require('./HTMLschema');
 const reportJson = JSON.parse(fs.readFileSync(pathToReport));
 
-function generateMainBoard(json) {
+function generateMainBoard(jsonData) {
     let mainBoard = '';
     let numberOfSkipped = 0;
     let numberOfPassed = 0;
     let numberOfFailed = 0;
-    json.forEach((feature) => {
+    jsonData.forEach((feature) => {
         feature.elements.forEach((scenario) => {
-            scenario.steps.forEach((step)=>{
-                switch(step.result.status){
-                    case "passed" :numberOfPassed++;break;
-                    case "failed" :numberOfFailed++;break;
-                    case "skipped" : numberOfSkipped++;break;
+            scenario.steps.forEach((step) => {
+                switch (step.result.status) {
+                    case "passed" :
+                        numberOfPassed++;
+                        break;
+                    case "failed" :
+                        numberOfFailed++;
+                        break;
+                    case "skipped" :
+                        numberOfSkipped++;
+                        break;
                 }
             })
         })
     });
-    mainBoard += `
-    <td><span class="text skipped"><span class="keyword highlight">Skipped: ${numberOfSkipped}</span></span></td>
+    mainBoard += `<td><span class="text skipped"><span class="keyword highlight">Skipped: ${numberOfSkipped}</span></span></td>
     <td><span class="text passed"><span class="keyword highlight">Passed: ${numberOfPassed}</span></span></td>
-    <td><span class="text failed"><span class="keyword highlight">Failed: ${numberOfFailed}</span></span></td>
-    `;
-    return mainBoard
+    <td><span class="text failed"><span class="keyword highlight">Failed: ${numberOfFailed}</span></span></td>`;
+    return mainBoard;
 }
 
 function generateSteps(stepsArray, scenarioName) {
@@ -57,8 +61,7 @@ function generateSteps(stepsArray, scenarioName) {
                    <a class ="toggle" href="#">Screenshot -</a>
                    <a class ="screenshot" href="${screenshotPath}">
                     <img class="screenshot" style="height:100%;width:98%" id="my_image" src='${screenshotPath}'>
-                   </a>
-`;
+                   </a>`;
             }
         }
 
@@ -118,5 +121,5 @@ function generateFeatures(jsonData) {
     return reportFillingHtml;
 }
 
-let finalHtml = htmlPage.header +htmlPage.startOfMain+ generateMainBoard(reportJson)+ htmlPage.endOfMain+ generateFeatures(reportJson) + htmlPage.end;
+let finalHtml = htmlPage.header + htmlPage.startOfMain + generateMainBoard(reportJson) + htmlPage.endOfMain + generateFeatures(reportJson) + htmlPage.end;
 fs.writeFileSync('report.html', finalHtml.toString(), 'utf8');
