@@ -4,6 +4,30 @@ const pathToReport = argv.path;
 const htmlPage = require('./HTMLschema');
 const reportJson = JSON.parse(fs.readFileSync(pathToReport));
 
+function generateMainBoard(json) {
+    let mainBoard = '';
+    let numberOfSkipped = 0;
+    let numberOfPassed = 0;
+    let numberOfFailed = 0;
+    json.forEach((feature) => {
+        feature.elements.forEach((scenario) => {
+            scenario.steps.forEach((step)=>{
+                switch(step.result.status){
+                    case "passed" :numberOfPassed++;break;
+                    case "failed" :numberOfFailed++;break;
+                    case "skipped" : numberOfSkipped++;break;
+                }
+            })
+        })
+    });
+    mainBoard += `
+    <td><span class="text skipped"><span class="keyword highlight">Skipped: ${numberOfSkipped}</span></span></td>
+    <td><span class="text passed"><span class="keyword highlight">Passed: ${numberOfPassed}</span></span></td>
+    <td><span class="text failed"><span class="keyword highlight">Failed: ${numberOfFailed}</span></span></td>
+    `;
+    return mainBoard
+}
+
 function generateSteps(stepsArray, scenarioName) {
     let stepsHtml = '';
     let stepDuration = 0;
@@ -17,11 +41,11 @@ function generateSteps(stepsArray, scenarioName) {
             }
             stepsHtml += `<div class="step"><p><span class="text ${step.result.status}">
                 <span class="keyword highlight"> ${step.keyword} </span> ${step.name}`
-                ;
-            if (step.result.status==="failed"){
-                stepsHtml +=`<br><br><span class="step"><span class="keyword highlight">Error: </span>${step.result.error_message}</span>`
+            ;
+            if (step.result.status === "failed") {
+                stepsHtml += `<br><br><span class="step"><span class="keyword highlight">Error: </span>${step.result.error_message}</span>`
             }
-            stepsHtml +=`<span class="time">time:${stepDuration}s</span></span></p></div>`
+            stepsHtml += `<span class="time">time:${stepDuration}s</span></span></p></div>`
         }
         else {
             if (step.embeddings !== undefined) {
@@ -94,5 +118,5 @@ function generateFeatures(jsonData) {
     return reportFillingHtml;
 }
 
-let finalHtml = htmlPage.header + generateFeatures(reportJson) + htmlPage.end;
+let finalHtml = htmlPage.header +htmlPage.startOfMain+ generateMainBoard(reportJson)+ htmlPage.endOfMain+ generateFeatures(reportJson) + htmlPage.end;
 fs.writeFileSync('report.html', finalHtml.toString(), 'utf8');

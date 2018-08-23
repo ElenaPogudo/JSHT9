@@ -1,7 +1,8 @@
 'use strict';
 
 module.exports = {
-   header : `<!DOCTYPE html><html>
+
+    header: `<!DOCTYPE html><html>
     <head>
     <title>Cucumber Feature Report by Alena Pahuda</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -44,6 +45,7 @@ module.exports = {
   .skipped {
   background-color: #fff1a0;
 }
+
   .step {
   margin: 10px;
 }
@@ -79,6 +81,18 @@ module.exports = {
 }
 });
 });
-  </script>"`,
-end : "</body></html>"
+  </script>`,
+
+
+    startOfMain: `<br><br>
+<h2 class="step"><p><table>
+        <tr>
+        <td><span class="keyword highlight step">Main info:</span></td>`,
+
+
+    endOfMain: `</tr>
+    </table>
+    </br></h2>`,
+
+    end: "</body></html>"
 };
